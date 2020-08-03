@@ -1,0 +1,6 @@
+*.abi
+*.log
+*.wasm
+dist
+build
+node_modules
