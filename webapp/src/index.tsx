@@ -1,176 +1,107 @@
 // To see this in action, run this in a terminal:
 //      gp preview $(gp url 8000)
 
-import React, { useState } from 'react';
-import * as ReactDOM from "react-dom";
+import React, { useState, useEffect } from 'react';
+import * as ReactDOM from 'react-dom';
 import { Api, JsonRpc, RpcError } from 'eosjs';
 import { JsSignatureProvider } from 'eosjs/dist/eosjs-jssig';
 
+import './styles.css';
+
 const rpc = new JsonRpc(''); // nodeos and web server are on same port
+const privateKey = '5KQwrPbwdL6PhXujxW37FSSQZ1JiwsST4cqQzDeyXtP79zkvFD3';
 
-interface PostData {
-    id?: number;
-    user?: string;
-    reply_to?: number;
-    content?: string;
-};
-
-interface PostFormState {
-    privateKey: string;
-    data: PostData;
-    error: string;
-};
-
-const PostForm = () => {
-    const [loading, setLoading] = useState<boolean>(false);
+const App: React.FC = () => {
+    const [api, setApi] = useState<Api>();
+    const [numbers, setNumbers] = useState<{ first: number|'', second: number|'' }>({ first: 0, second: 0})
     const [error, setError] = useState<string>('');
-    api: Api;
+    const [result, setResult] = useState<number|undefined>();
 
-    constructor(props: {}) {
-        super(props);
-        this.api = new Api({ rpc, signatureProvider: new JsSignatureProvider([]) });
-        this.state = {
-            privateKey: '5KQwrPbwdL6PhXujxW37FSSQZ1JiwsST4cqQzDeyXtP79zkvFD3',
-            data: {
-                id: 0,
-                user: 'bob',
-                reply_to: 0,
-                content: 'This is a test'
-            },
-            error: '',
-        };
+    useEffect(() => {
+        setApi(new Api({ rpc, signatureProvider: new JsSignatureProvider([privateKey]) }));
+    }, []);
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (!e.target.value) return setNumbers({...numbers, [e.target.name]: '' });
+        setNumbers({...numbers, [e.target.name]: Number.parseInt(e.target.value) });
     }
 
-    setData(data: PostData) {
-        this.setState({ data: { ...this.state.data, ...data } });
-    }
-
-    async post() {
+    const sum = async () => {
+        setResult(undefined);
+        if (api === undefined) {
+            return setError('Unexpected error: Api object is not set.')
+        }
         try {
-            this.api.signatureProvider = new JsSignatureProvider([this.state.privateKey]);
-            const result = await this.api.transact(
+            const result = await api.transact(
                 {
                     actions: [{
-                        account: 'talk',
-                        name: 'post',
+                        account: 'eosio',
+                        name: 'sum',
                         authorization: [{
-                            actor: this.state.data.user,
+                            actor: 'bob',
                             permission: 'active',
                         }],
-                        data: this.state.data,
+                        data: {
+                            numberA: numbers.first,
+                            numberB: numbers.second
+                        },
                     }]
                 }, {
                     blocksBehind: 3,
                     expireSeconds: 30,
                 });
             console.log(result);
-            this.setState({ error: '' });
+            setResult(result.processed.action_traces[0].return_value);
         } catch (e) {
-            if (e.json)
-                this.setState({ error: JSON.stringify(e.json, null, 4) });
-            else
-                this.setState({ error: '' + e });
+            if (e.json) {
+                setError(JSON.stringify(e.json, null, 4));
+            } else {
+                setError(e + '');
+            }
         }
     }
 
-    render() {
-        return <div>
-            <table>
-                <tbody>
-                    <tr>
-                        <td>Private Key</td>
-                        <td><input
-                            style={{ width: 500 }}
-                            value={this.state.privateKey}
-                            onChange={e => this.setState({ privateKey: e.target.value })}
-                        /></td>
-                    </tr>
-                    <tr>
-                        <td>User</td>
-                        <td><input
-                            style={{ width: 500 }}
-                            value={this.state.data.user}
-                            onChange={e => this.setData({ user: e.target.value })}
-                        /></td>
-                    </tr>
-                    <tr>
-                        <td>Reply To</td>
-                        <td><input
-                            style={{ width: 500 }}
-                            value={this.state.data.reply_to}
-                            onChange={e => this.setData({ reply_to: +e.target.value })}
-                        /></td>
-                    </tr>
-                    <tr>
-                        <td>Content</td>
-                        <td><input
-                            style={{ width: 500 }}
-                            value={this.state.data.content}
-                            onChange={e => this.setData({ content: e.target.value })}
-                        /></td>
-                    </tr>
-                </tbody>
-            </table>
-            <br />
-            <button onClick={e => this.post()}>Post</button>
-            {this.state.error && <div>
+    return (
+        <div className='container'>
+            <div className='header'>Sample Return Values Application</div>
+            <div className='input-container'>
+                <div className='label'>First number:</div>
+                <div>
+                    <input
+                        className='input'
+                        name='first'
+                        type='number'
+                        value={numbers.first}
+                        onChange={handleChange}>
+                    </input>
+                </div>
+            </div>
+            <div className='input-container'>
+                <div className='label'>Second number:</div>
+                <div>
+                    <input
+                        className='input'
+                        name='second'
+                        type='number'
+                        value={numbers.second}
+                        onChange={handleChange}>
+                    </input>
+                </div>
+            </div>
+            <div className='button-container'>
+                <button className='button' onClick={e => sum()}>Sum</button>
+            </div>
+            {result && <div className='result'>Result: {result}</div>}
+            {error && <div>
                 <br />
                 Error:
-                <code><pre>{this.state.error}</pre></code>
+                <code><pre>{error}</pre></code>
             </div>}
-        </div>;
-    }
-}
-
-class Messages extends React.Component<{}, { content: string }> {
-    interval: number;
-
-    constructor(props: {}) {
-        super(props);
-        this.state = { content: '///' };
-    }
-
-    componentDidMount() {
-        this.interval = window.setInterval(async () => {
-            try {
-                const rows = await rpc.get_table_rows({
-                    json: true, code: 'talk', scope: '', table: 'message', limit: 1000,
-                });
-                let content =
-                    'id          reply_to      user          content\n' +
-                    '=============================================================\n';
-                for (let row of rows.rows)
-                    content +=
-                        (row.id + '').padEnd(12) +
-                        (row.reply_to + '').padEnd(12) + '  ' +
-                        row.user.padEnd(14) +
-                        row.content + '\n';
-                this.setState({ content });
-            } catch (e) {
-                if (e.json)
-                    this.setState({ content: JSON.stringify(e.json, null, 4) });
-                else
-                    this.setState({ content: '' + e });
-            }
-
-        }, 200);
-    }
-
-    componentWillUnmount() {
-        clearInterval(this.interval);
-    }
-
-    render() {
-        return <code><pre>{this.state.content}</pre></code>;
-    }
+        </div>
+    );
 }
 
 ReactDOM.render(
-    <div>
-        <PostForm />
-        <br />
-        Messages:
-        <Messages />
-    </div>,
-    document.getElementById("example")
+    <App />,
+    document.getElementById('sample')
 );
