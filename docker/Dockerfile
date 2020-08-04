@@ -90,8 +90,8 @@ RUN git clone https://github.com/EOSIO/eos.git \
  && sudo ln -s /usr/lib/x86_64-linux-gnu/cmake/eosio/ /usr/lib/cmake/eosio
 
 ### CDT
-USER root
-WORKDIR /root
+USER gitpod
+WORKDIR /home/gitpod
 RUN git clone https://github.com/EOSIO/eosio.cdt.git \
  && cd eosio.cdt \
  && git checkout eosio-cdt-2.1-staging-c \
