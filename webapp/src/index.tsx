@@ -3,22 +3,43 @@
 
 import React, { useState, useEffect } from 'react';
 import * as ReactDOM from 'react-dom';
-import { Api, JsonRpc, RpcError } from 'eosjs';
+import { Api, JsonRpc, WasmAbi } from 'eosjs';
 import { JsSignatureProvider } from 'eosjs/dist/eosjs-jssig';
+import { WasmAbiProvider } from 'eosjs/dist/eosjs-wasmabi';
 
 import './styles.css';
+import { TransactionBuilder } from 'eosjs/dist/eosjs-api';
+import { ActionSerializerType } from 'eosjs/dist/eosjs-api-interfaces';
 
 const rpc = new JsonRpc(''); // nodeos and web server are on same port
 const privateKey = '5KQwrPbwdL6PhXujxW37FSSQZ1JiwsST4cqQzDeyXtP79zkvFD3';
 
 const App: React.FC = () => {
     const [api, setApi] = useState<Api>();
+    const [sumContract, setSumContract] = useState<WasmAbi>();
     const [numbers, setNumbers] = useState<{ first: number|'', second: number|'' }>({ first: 0, second: 0})
     const [error, setError] = useState<string>('');
     const [result, setResult] = useState<number|undefined>();
 
     useEffect(() => {
-        setApi(new Api({ rpc, signatureProvider: new JsSignatureProvider([privateKey]) }));
+        (async () => {
+            const api = new Api({ rpc, signatureProvider: new JsSignatureProvider([privateKey]), wasmAbiProvider: new WasmAbiProvider }); 
+            const response = await fetch('sum_abi.wasm');
+            const buffer = await response.arrayBuffer();
+            const sumModule = await WebAssembly.compile(buffer);
+
+            const mod = new WasmAbi({
+                account: 'eosio',
+                mod: sumModule,
+                memoryThreshold: 32000,
+                textEncoder: new TextEncoder(),
+                textDecoder: new TextDecoder('utf-8', { fatal: true }),
+                print: (x: any) => console.info(x),
+            })
+
+            setApi(api);
+            setSumContract(mod);
+        })();
     }, []);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -31,27 +52,26 @@ const App: React.FC = () => {
         if (api === undefined) {
             return setError('Unexpected error: Api object is not set.')
         }
+        if (sumContract === undefined) {
+            return setError('Unexpected error: Sum Contract not set')
+        }
         try {
-            const result = await api.transact(
-                {
-                    actions: [{
-                        account: 'eosio',
-                        name: 'sum',
-                        authorization: [{
-                            actor: 'bob',
-                            permission: 'active',
-                        }],
-                        data: {
-                            numberA: numbers.first,
-                            numberB: numbers.second
-                        },
-                    }]
-                }, {
-                    blocksBehind: 3,
-                    expireSeconds: 30,
-                });
-            console.log(result);
-            setResult(result.processed.action_traces[0].return_value);
+            await sumContract.reset();
+            const transactionResult = await api.transact({
+                actions: [
+                    sumContract.actions.sum([{ actor: 'eosio', permission: 'active' }], numbers.first, numbers.second)
+                ]
+            }, {
+                blocksBehind: 3,
+                expireSeconds: 30
+            });
+            /*
+            const tx = api.buildTransaction() as TransactionBuilder;
+            tx.with('eosio').as('bob').sum(numbers.first, numbers.second);
+            const transactionResult = await tx.send({ blocksBehind: 3, expireSeconds: 30 });
+            */
+            console.log(transactionResult);
+            setResult(transactionResult.processed.action_traces[0].return_value);
         } catch (e) {
             if (e.json) {
                 setError(JSON.stringify(e.json, null, 4));
