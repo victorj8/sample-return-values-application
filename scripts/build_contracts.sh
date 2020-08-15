@@ -1,5 +1,3 @@
-rm -rf build
-
 mkdir build
 
 cd build
@@ -13,5 +11,9 @@ cleos set abi eosio ./build/contracts/boot/boot.abi -p eosio@active
 cleos set code eosio ./build/contracts/boot/boot.wasm -p eosio@active
 cleos push action eosio boot "[]" -p eosio@active
 
-cleos set abi eosio ./build/contracts/sum/sum.abi -p eosio@active
-cleos set code eosio ./build/contracts/sum/sum.wasm -p eosio@active
+cleos set code eosio ./build/contracts/system/system.wasm -p eosio@active
+cleos set abi eosio ./build/contracts/system/system.abi -p eosio@active
+cleos push action eosio init "[]" -p eosio@active
+
+cleos set abi eosio ./build/contracts/action_results/action_results.abi -p eosio@active
+cleos set code eosio ./build/contracts/action_results/action_results.wasm -p eosio@active

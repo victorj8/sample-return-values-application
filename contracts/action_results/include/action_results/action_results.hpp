@@ -4,9 +4,9 @@
 
 using namespace eosio;
 
-namespace sum {
+namespace action_results {
 
-class [[eosio::contract("sum")]] sum_contract : public contract {
+class [[eosio::contract("action_results")]] action_results_contract : public contract {
   public:
       using contract::contract;
 
@@ -18,7 +18,7 @@ class [[eosio::contract("sum")]] sum_contract : public contract {
   private:
 };
 
-EOSIO_DECLARE_ACTIONS(sum_contract, "eosio"_n, //
+EOSIO_DECLARE_ACTIONS(action_results_contract, "eosio"_n, //
                       sum)
 
 }
