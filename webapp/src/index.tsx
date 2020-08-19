@@ -24,7 +24,7 @@ const App: React.FC = () => {
     useEffect(() => {
         (async () => {
             const api = new Api({ rpc, signatureProvider: new JsSignatureProvider([privateKey]), wasmAbiProvider: new WasmAbiProvider }); 
-            const response = await fetch('action_results_abi.wasm');
+            const response = await fetch('./src/action_results_abi.wasm');
             const buffer = await response.arrayBuffer();
             const sumModule = await WebAssembly.compile(buffer);
 
