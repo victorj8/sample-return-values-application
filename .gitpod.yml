@@ -1,4 +1,4 @@
-image: bradlhart/sample-return-values:v0.0.2
+image: bradlhart/sample-return-values:v0.0.3
 
 ports:
 - port: 3000
@@ -17,5 +17,5 @@ tasks:
   init: yarn
   command: nginx -c $PWD/nginx.conf; npx webpack-dev-server
 - before: cleos wallet unlock --password </password
-  command: nodeos --config-dir ~/eosio/chain/config --data-dir ~/eosio/chain/data -e -p eosio --replay-blockchain --plugin eosio::producer_plugin --plugin eosio::chain_api_plugin --plugin eosio::producer_api_plugin --plugin eosio::http_plugin --http-server-address=0.0.0.0:8888 --access-control-allow-origin=* --contracts-console --http-validate-host=false --verbose-http-errors --max-transaction-time=100000
+  command: nodeos --config-dir ~/eosio/chain/config --data-dir ~/eosio/chain/data -e -p eosio --replay-blockchain --plugin eosio::chain_api_plugin --plugin eosio::http_plugin --http-server-address=0.0.0.0:8888 --access-control-allow-origin=* --contracts-console --http-validate-host=false --verbose-http-errors --max-transaction-time=100000
 

@@ -1,6 +1,4 @@
 FROM ubuntu:18.04
-# Remove later
-ENTRYPOINT ["nodeos", "--data-dir", "/root/.local/share", "-e", "-p", "eosio", "--replay-blockchain", "--plugin", "eosio::producer_plugin", "--plugin", "eosio::chain_api_plugin", "--plugin", "eosio::http_plugin", "--http-server-address=0.0.0.0:8888", "--access-control-allow-origin=*", "--contracts-console", "--http-validate-host=false", "--verbose-http-errors", "--max-transaction-time=100"]
 
 ### base
 RUN yes | unminimize \
@@ -105,10 +103,16 @@ RUN git clone https://github.com/EOSIO/eosio.cdt.git \
 
 ENV PATH="/home/gitpod/eos/build/bin/:/home/gitpod/eosio.cdt/build/bin/:${PATH}"
 
-### nginx, /password
+RUN echo "COPYING APP CONTRACTS"
+COPY ./contracts /home/gitpod/contracts
+COPY ./deploy_contracts.sh /home/gitpod/
+
+### nginx, /password $HOME/contracts and deploy_contracts.sh
 USER root
 WORKDIR /root
 RUN echo >/password && chown gitpod /password && chgrp gitpod /password \
+ && chown -R gitpod /home/gitpod/contracts && chgrp -R gitpod /home/gitpod/contracts \
+ && chown gitpod /home/gitpod/deploy_contracts.sh && chgrp gitpod /home/gitpod/deploy_contracts.sh \
  && >/run/nginx.pid \
  && chmod 666 /run/nginx.pid \
  && chmod 666 /var/log/nginx/* \
@@ -128,6 +132,9 @@ RUN cleos wallet create --to-console | tail -n 1 | sed 's/"//g' >/password \
 RUN echo '\n\
    unlock-timeout = 31536000 \n\
 ' >$HOME/eosio-wallet/config.ini
+
+RUN echo "DEPLOYING CONTRACTS"
+RUN /bin/bash /home/gitpod/deploy_contracts.sh
 
 ### checks
 # no root-owned files in the home directory
