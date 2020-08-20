@@ -1174,10 +1174,10 @@ enhanced-resolve@^4.0.0, enhanced-resolve@^4.1.1, enhanced-resolve@^4.3.0:
     memory-fs "^0.5.0"
     tapable "^1.0.0"
 
-eosjs@^21.0.3-16-61a8bdf:
-  version "21.0.3-16-61a8bdf"
-  resolved "https://registry.yarnpkg.com/eosjs/-/eosjs-21.0.3-16-61a8bdf.tgz#162db3bbe6c454519a7900c347de9d2a9d316d05"
-  integrity sha512-bMJ+f5tZjNLQtyTPbK07iFIcsxODYKUirigs/SY9upYGAJIChEbIKmH3mQPaOmSq/WecLpq+XHIPMwfD/oys7w==
+eosjs@21.1.0-20-c31c737:
+  version "21.1.0-20-c31c737"
+  resolved "https://registry.yarnpkg.com/eosjs/-/eosjs-21.1.0-20-c31c737.tgz#decd67f76f0b00e7a9dacfc5cc35e6296012cef1"
+  integrity sha512-+f6R40caFaovy9EmppvdQOOx82+ubQKXF4dv3XxJSIduU/woA7spjW6A+Dqb8ZOQW3uz+FvYncosKmIoNHFukQ==
   dependencies:
     bn.js "5.1.2"
     elliptic "6.5.3"
