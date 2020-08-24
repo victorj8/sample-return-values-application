@@ -22,15 +22,14 @@ const App: React.FC = () => {
 
     useEffect(() => {
         (async () => {
-            const wasmAbiProvider = new WasmAbiProvider();
-            const api = new Api({ rpc, signatureProvider: new JsSignatureProvider([privateKey]), wasmAbiProvider }); 
-            const response = await fetch('./src/sum_abi.wasm');
+            const api = new Api({ rpc, signatureProvider: new JsSignatureProvider([privateKey]), wasmAbiProvider: new WasmAbiProvider }); 
+            const response = await fetch('./src/action_results_abi.wasm');
             const buffer = await response.arrayBuffer();
-            const sumModule = await WebAssembly.compile(buffer);
+            const actionResultsModule = await WebAssembly.compile(buffer);
 
-            wasmAbiProvider.setWasmAbis([new WasmAbi({
+            await api.wasmAbiProvider.setWasmAbis([new WasmAbi({
                 account: 'returnvalue',
-                mod: sumModule,
+                mod: actionResultsModule,
                 memoryThreshold: 32000,
                 textEncoder: new TextEncoder(),
                 textDecoder: new TextDecoder('utf-8', { fatal: true }),
@@ -48,15 +47,16 @@ const App: React.FC = () => {
 
     const sum = async () => {
         setResult(undefined);
+        setError('');
         if (api === undefined) {
             return setError('Unexpected error: Api object is not set.')
         }
         try {
             const tx = api.buildTransaction() as TransactionBuilder;
-            tx.with('eosio').as('bob').sum(numbers.first, numbers.second);
-            const transactionResult = await tx.send({ blocksBehind: 3, expireSeconds: 30 }) as TransactResult;
-            console.log(transactionResult);
-            setResult(transactionResult.processed.action_traces[0].return_value);
+            tx.with('returnvalue').as('returnvalue').sum(numbers.first, numbers.second);
+            // two changes needed, "as TransactResult" for return type in transact and add new return_value_* variables to action trace type
+            const transactionResult = await tx.send({ blocksBehind: 3, expireSeconds: 30 }) as any;
+            setResult(transactionResult.processed.action_traces[0].return_value_data);
         } catch (e) {
             if (e.json) {
                 setError(JSON.stringify(e.json, null, 4));
