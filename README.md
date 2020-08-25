@@ -41,10 +41,9 @@ The source code for the sample smartcontract is at `contracts/action_results` wi
 $ mkdir build && cd build
 $ cmake -DCMAKE_FRAMEWORK_PATH=/home/gitpod/eosio.cdt/build ..
 $ make -j8 
-
 ```
 
-This will produce `action_results.abi`, `action_results.wasm`, and `action_results_abi.wasm`.
+This will produce `action_results.abi`, `action_results.wasm`, and `action_results_abi.wasm`.  The webapp will need the `action_results_abi.wasm` so copy that file from your build folder to the `webapp/src` folder after compiling.
 
 ## Installing the contract
 
@@ -53,15 +52,6 @@ Run this in a terminal from the build directory:
 ```
 cleos set abi returnvalue ./contracts/action_results/action_results.abi -p returnvalue@active -p eosio@active
 cleos set code returnvalue ./contracts/action_results/action_results.wasm -p returnvalue@active -p eosio@active
-
-```
-
-## Listing the messages
-
-Run this in a terminal:
-```
-cleos get table talk '' message
-
 ```
 
 ## Viewing the front-end decentralized web app (EOSJS):
@@ -70,7 +60,6 @@ The source code for the React WebApp is at `webapp/src/index.tsx` within the IDE
 
 ```
 gp preview $(gp url 8000)
-
 ```
 
 ## Resetting the chain
@@ -84,7 +73,6 @@ To remove the existing chain and create another:
 ```
 rm -rf ~/eosio/chain
 nodeos --config-dir ~/eosio/chain/config --data-dir ~/eosio/chain/data -e -p eosio --plugin eosio::chain_api_plugin
-
 ```
 
 ## Contributing
