@@ -27,7 +27,7 @@ The following instructions assume that the Web IDE was started successfully (see
 
 ## Initial State
 
-The example application has the simple smart contract located in `contracts` that is already set on the running chain.  Upon launching the IDE, the nodeos and webpack processes will start the chain and webapp respectively and you can test the simple number addition action the smart contract has. 
+The example application has the simple smart contract located in `contracts`.  This version is already set on the chain and is available after the chain initializes.  Upon launching the IDE, the nodeos and webpack processes will start the chain and webapp respectively and you can test the simple number addition action the smart contract has. 
 
 ## Opening a terminal
 
@@ -35,12 +35,12 @@ To open a terminal, use the Terminal drop-down menu in the IDE user interface.
 
 ## Building sample contract
 
-The source code for the sample smartcontract is at `contracts/action_results` within the IDE. To compile the contract, run these commands in a terminal:
+The source code for the sample smart contract is at `contracts/action_results` if you would like to change the contract and set a new version to the chain.  To compile the contract, run these commands in a new terminal or at the root folder of the workspace in an existing terminal:
 
 ```
-$ mkdir build && cd build
-$ cmake -DCMAKE_FRAMEWORK_PATH=/home/gitpod/eosio.cdt/build ..
-$ make -j8 
+mkdir build && cd build
+cmake -DCMAKE_FRAMEWORK_PATH=/home/gitpod/eosio.cdt/build ..
+make -j8 
 ```
 
 This will produce `action_results.abi`, `action_results.wasm`, and `action_results_abi.wasm`.  The webapp will need the `action_results_abi.wasm` so copy that file from your build folder to the `webapp/src` folder after compiling.
