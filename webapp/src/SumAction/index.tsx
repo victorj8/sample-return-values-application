@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { Api } from 'eosjs';
-import { TransactionBuilder } from 'eosjs/dist/eosjs-api';
 
 import Error from '../Error';
 
@@ -24,10 +23,23 @@ const SumAction: React.FC<SumActionProps> = ({ api }: SumActionProps) => {
             return setError('Unexpected error: Api object is not set.')
         }
         try {
-            const tx = api.buildTransaction() as TransactionBuilder;
-            tx.with('returnvalue').as('returnvalue').sum(numbers.first, numbers.second);
-            // two changes needed, "as TransactResult" for return type in transact and add new return_value_* variables to action trace type
-            const transactionResult = await tx.send({ blocksBehind: 3, expireSeconds: 30 }) as any;
+            const transactionResult = await api.transact({
+                actions: [{
+                    account: 'returnvalue',
+                    name: 'sum',
+                    authorization: [{
+                        actor: 'returnvalue',
+                        permission: 'active',
+                    }],
+                    data: {
+                        valueA: numbers.first,
+                        valueB: numbers.second
+                    }
+                }]
+            }, {
+                blocksBehind: 3,
+                expireSeconds: 30
+            }) as any;
             setResult(transactionResult.processed.action_traces[0].return_value_data);
         } catch (e) {
             if (e.json) {

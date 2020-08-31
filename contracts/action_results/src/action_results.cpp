@@ -1,3 +1,15 @@
-#include <action_results/action_results.hpp>
+#include <eosio/eosio.hpp>
 
-EOSIO_ACTION_DISPATCHER(action_results::actions)
+using namespace eosio;
+
+class [[eosio::contract]] action_results : public contract {
+  public:
+      using contract::contract;
+
+      [[eosio::action]]
+      int sum(int valueA, int valueB) {
+         return valueA + valueB;
+      }
+
+  private:
+};

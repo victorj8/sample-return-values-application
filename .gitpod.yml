@@ -1,4 +1,4 @@
-image: bradlhart/sample-return-values:v0.0.3
+image: bradlhart/sample-return-values:v0.0.4
 
 ports:
 - port: 3000
