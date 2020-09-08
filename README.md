@@ -35,21 +35,21 @@ To open a terminal, use the Terminal drop-down menu in the IDE user interface.
 
 ## Building sample contract
 
-The source code for the sample smart contract is at `contracts/action_results` if you would like to change the contract and set a new version to the chain.  To compile the contract, run these commands in a new terminal or at the root folder of the workspace in an existing terminal:
+The source code for the sample smart contract is in `contracts` if you would like to change the contract and set a new version to the chain.  To compile the contract, run these commands in a new terminal or at the root folder of the workspace in an existing terminal:
 
 ```
 eosio-cpp contracts/action_results.cpp
 ```
 
-This will produce `action_results.abi`, `action_results.wasm`, and `action_results_abi.wasm`.  The webapp will need the `action_results_abi.wasm` so copy that file from your build folder to the `webapp/src` folder after compiling.
+This will produce `action_results.abi` and `action_results.wasm` in the directory you ran the command.
 
 ## Installing the contract
 
-Run this in a terminal from the build directory:
+Run this in a terminal from the directory you ran the previous command:
 
 ```
-cleos set abi returnvalue ./contracts/action_results/action_results.abi -p returnvalue@active -p eosio@active
-cleos set code returnvalue ./contracts/action_results/action_results.wasm -p returnvalue@active -p eosio@active
+cleos set abi returnvalue ./action_results.abi -p returnvalue@active -p eosio@active
+cleos set code returnvalue ./action_results.wasm -p returnvalue@active -p eosio@active
 ```
 
 ## Viewing the front-end decentralized web app (EOSJS):

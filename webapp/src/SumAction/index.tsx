@@ -14,7 +14,13 @@ const SumAction: React.FC<SumActionProps> = ({ api }: SumActionProps) => {
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (!e.target.value) return setNumbers({...numbers, [e.target.name]: '' });
-        setNumbers({...numbers, [e.target.name]: Number.parseInt(e.target.value) });
+        const value = Math.max(Number(e.target.min), Math.min(Number(e.target.max), Number(e.target.value)));
+        setNumbers({...numbers, [e.target.name]: value });
+    };
+
+    const handleKeyPress = async (e: React.KeyboardEvent<HTMLInputElement>) => {
+        if(e.key !== 'Enter') return;
+        await sum();
     };
 
     const sum = async () => {
@@ -58,8 +64,8 @@ const SumAction: React.FC<SumActionProps> = ({ api }: SumActionProps) => {
         <div className='contract-container'>
             <div className='contract-header-container'>
                 <div className='contract-header'>Addition</div>
-                {!result && <button className='button' onClick={e => sum()}>Get Result</button>}
-                {result && <button className='button' onClick={e => retry()}>Retry</button>}
+                {result === undefined && <button className='button' onClick={e => sum()}>Get Result</button>}
+                {typeof result === 'number' && <button className='button' onClick={e => retry()}>Retry</button>}
             </div>
             <div className='equation'>
                 <div className='input-container'>
@@ -67,9 +73,12 @@ const SumAction: React.FC<SumActionProps> = ({ api }: SumActionProps) => {
                         className='input'
                         name='first'
                         type='number'
+                        min={0}
+                        max={99999}
                         disabled={!!result}
                         value={numbers.first}
-                        onChange={handleChange}>
+                        onChange={handleChange}
+                        onKeyPress={handleKeyPress}>
                     </input>
                 </div>
                 <div className='symbol'>+</div>
@@ -78,14 +87,17 @@ const SumAction: React.FC<SumActionProps> = ({ api }: SumActionProps) => {
                         className='input'
                         name='second'
                         type='number'
+                        min={0}
+                        max={99999}
                         disabled={!!result}
                         value={numbers.second}
-                        onChange={handleChange}>
+                        onChange={handleChange}
+                        onKeyPress={handleKeyPress}>
                     </input>
                 </div>
                 <div className='symbol'>=</div>
-                {!result && <div className='result'>?</div>}
-                {result && <div className='result'>{result}</div>}
+                {result === undefined && <div className='result'>?</div>}
+                {typeof result === 'number' && <div className='result'>{result}</div>}
             </div>
             
             {error && <Error error={error} />}
