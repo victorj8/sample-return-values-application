@@ -53,7 +53,7 @@ WORKDIR /root
 RUN curl -LO https://cmake.org/files/v3.13/cmake-3.13.2.tar.gz \
  && tar -xzf cmake-3.13.2.tar.gz \
  && cd cmake-3.13.2 \
- && ./bootstrap --prefix=/usr/local \
+ && ./bootstrap --prefix=/usr/local --parallel=8 \
  && make -j8 \
  && make install \
  && cd /root \
@@ -64,7 +64,7 @@ RUN curl -LO https://dl.bintray.com/boostorg/release/1.72.0/source/boost_1_72_0.
  && tar -xjf boost_1_72_0.tar.bz2 \
  && cd boost_1_72_0 \
  && ./bootstrap.sh --prefix=/usr/local \
- && ./b2 --with-iostreams --with-date_time --with-filesystem --with-system --with-program_options --with-chrono --with-test -j8 install \
+ && ./b2 --with-iostreams --with-date_time --with-filesystem --with-system --with-program_options --with-chrono --with-test -j$(nproc) install \
  && cd /root \
  && rm -rf boost_1_72_0.tar.bz2 boost_1_72_0
 
@@ -76,8 +76,8 @@ RUN useradd -l -u 33333 -G sudo -md /home/gitpod -s /bin/bash -p gitpod gitpod \
 ENV HOME=/home/gitpod
 
 ### eosio
-WORKDIR /root
 USER root
+WORKDIR /root
 RUN git clone https://github.com/EOSIO/eos.git \
  && cd eos \
  && git checkout develop \
@@ -85,23 +85,24 @@ RUN git clone https://github.com/EOSIO/eos.git \
  && mkdir build \
  && cd build \
  && CC=clang-8 CXX=clang++-8 cmake -GNinja -DCMAKE_BUILD_TYPE=Release -DCMAKE_AR=/usr/bin/llvm-ar-8 -DCMAKE_RANLIB=/usr/bin/llvm-ranlib-8 -DCMAKE_EXE_LINKER_FLAGS=-fuse-ld=lld .. \
- && CC=clang-8 CXX=clang++-8 ninja -j8 \
+ && CC=clang-8 CXX=clang++-8 ninja -j5 \
  && sudo ninja install \
- && sudo ln -s /usr/lib/x86_64-linux-gnu/cmake/eosio/ /usr/lib/cmake/eosio
+ && sudo ln -s /usr/lib/x86_64-linux-gnu/cmake/eosio/ /usr/lib/cmake/eosio \
+ && rm -rf /root/eos
 
 ### CDT
-USER gitpod
-WORKDIR /home/gitpod
+USER root
+WORKDIR /root
 RUN git clone https://github.com/EOSIO/eosio.cdt.git \
  && cd eosio.cdt \
- && git checkout eosio-cdt-2.1-staging-c \
+ && git checkout develop \
  && git submodule update --init --recursive \
  && mkdir build \
  && cd build \
- && cmake -GNinja .. \
- && ninja -j8
-
-ENV PATH="/home/gitpod/eos/build/bin/:/home/gitpod/eosio.cdt/build/bin/:${PATH}"
+ && cmake .. \
+ && make -j5 \
+ && sudo make install \
+ && rm -rf /root/eosio.cdt
 
 RUN echo "COPYING APP CONTRACTS"
 COPY ./contracts /home/gitpod/contracts
