@@ -3,14 +3,21 @@
   "description": "Example Website",
   "main": "index.html",
   "scripts": {
-    "serve": "webpack-dev-server --mode development"
+    "serve": "webpack-dev-server --mode development",
+    "serveInGitPod": "webpack-dev-server --mode development",
+    "docker-run": "docker-compose down -v && docker-compose up",
+    "docker-persistent": "docker-compose up",
+    "lint": "eslint --fix --ext .js,.jsx,.ts,.tsx src"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@blockone/eslint-config-blockone": "^3.0.0",
     "@types/react": "^16.9.44",
     "@types/react-dom": "^16.9.8",
     "css-loader": "^4.2.0",
+    "cypress": "^5.6.0",
+    "eslint": "^6.8.0",
     "source-map-loader": "^1.0.1",
     "style-loader": "^1.2.1",
     "ts-loader": "^8.0.2",
@@ -20,7 +27,7 @@
     "webpack-dev-server": "^3.11.0"
   },
   "dependencies": {
-    "eosjs": "21.1.0-20-c31c737",
+    "eosjs": "^21.1.0-24-c73b44d",
     "react": "^16.13.1",
     "react-dom": "^16.13.1"
   }
