@@ -2,7 +2,8 @@
 *.log
 *.wasm
 !*abi.wasm
-cypress
+cypress/*
+!cypress/integration
 !cypress/integration/index.spec.js
 *.deb
 dist
