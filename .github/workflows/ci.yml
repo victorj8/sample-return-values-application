@@ -44,9 +44,11 @@ jobs:
         run: |
           yarn audit
       - name: Test
-        uses: cypress-io/github-action@8aac1d019734a107e4eaaefe2e26beb3149e5540
+        uses: cypress-io/github-action@24e868edca0677dd8ae1b8c6b15d6febd75d90ad
         with:
           spec: cypress/integration/index.spec.js
+          start: yarn serve
+          wait-on: http://localhost:8080
       - name: Get Protected Status
         if: github.event_name == 'push'
         id: protected_step
