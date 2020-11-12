@@ -2,7 +2,12 @@
 *.log
 *.wasm
 !*abi.wasm
+cypress
+!cypress/integration/index.spec.js
+*.deb
 dist
 build
 node_modules
 docker/contracts
+.DS_Store
+.vscode

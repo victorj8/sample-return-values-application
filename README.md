@@ -50,7 +50,7 @@ cleos set code returnvalue ./action_results.wasm -p returnvalue@active -p eosio@
 
 ## Viewing the front-end decentralized web app (EOSJS):
 
-The source code for the React WebApp is at `webapp/src/index.tsx` within the IDE. To preview the WebApp run this in a terminal:
+The source code for the React WebApp is at `src/index.tsx` within the IDE. To preview the WebApp run this in a terminal:
 
 ```
 gp preview $(gp url 8000)
