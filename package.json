@@ -7,7 +7,7 @@
     "serveInGitPod": "webpack-dev-server --mode development",
     "docker-run": "docker-compose down -v && docker-compose up",
     "docker-persistent": "docker-compose up",
-    "lint": "eslint --fix --ext .js,.jsx,.ts,.tsx src"
+    "lint": "eslint --ext .js,.jsx,.ts,.tsx src"
   },
   "author": "",
   "license": "ISC",
