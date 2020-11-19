@@ -11,4 +11,3 @@ build
 node_modules
 docker/contracts
 .DS_Store
-.vscode

@@ -1,0 +1,11 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"type": "shell",
+			"command": "eosio-cpp -abigen ./contracts/action_results.cpp -o ./contracts/action_results.wasm -R ./contracts/ricardian/",
+			"group": "build",
+			"label": "Build Contract"
+		}
+	]
+}
