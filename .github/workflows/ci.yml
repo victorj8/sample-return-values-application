@@ -27,7 +27,7 @@ jobs:
         with:
           token: ${{ github.token }}
       - name: Setup Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@1c5c1375b3817ad821719597effe8e3d6f764930
+        uses: actions/setup-node@c6fd00ceb9747fb23ffdf72987450a2664414867
         with:
           node-version: ${{ matrix.node-version }}
           registry-url: 'https://registry.npmjs.org'
@@ -44,7 +44,7 @@ jobs:
         run: |
           yarn audit
       - name: Test
-        uses: cypress-io/github-action@24e868edca0677dd8ae1b8c6b15d6febd75d90ad
+        uses: cypress-io/github-action@6e9b583c9652e99b72b042a3957980fc6166efae
         with:
           spec: cypress/integration/index.spec.js
           start: yarn serve
