@@ -3,7 +3,7 @@
 	"tasks": [
 		{
 			"type": "shell",
-			"command": "eosio-cpp -abigen ./contracts/action_results.cpp -o ./contracts/action_results.wasm -R ./contracts/ricardian/",
+			"command": "cd ./contracts/action_return_value/build && cmake .. && make",
 			"group": "build",
 			"label": "Build Contract"
 		}
