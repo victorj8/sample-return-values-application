@@ -27,7 +27,7 @@
     "webpack-dev-server": "^3.11.0"
   },
   "dependencies": {
-    "eosjs": "^21.1.0-25-707787d",
+    "eosjs": "^21.1.0-27-2e51a04",
     "react": "^16.14.0",
     "react-dom": "^16.14.0"
   }

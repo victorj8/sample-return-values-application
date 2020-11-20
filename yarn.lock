@@ -180,9 +180,9 @@
   integrity sha512-tHq6qdbT9U1IRSGf14CL0pUlULksvY9OZ+5eEgl1N7t+OA3tGvNpxJCzuKQlsNgCVwbAs670L1vcVQi8j9HjnA==
 
 "@types/node@*":
-  version "14.14.8"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-14.14.8.tgz#2127bd81949a95c8b7d3240f3254352d72563aec"
-  integrity sha512-z/5Yd59dCKI5kbxauAJgw6dLPzW+TNOItNE00PkpzNwUIEwdj/Lsqwq94H5DdYBX7C13aRA0CY32BK76+neEUA==
+  version "14.14.9"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-14.14.9.tgz#04afc9a25c6ff93da14deabd65dc44485b53c8d6"
+  integrity sha512-JsoLXFppG62tWTklIoO4knA+oDTYsmqWxHRvd4lpmfQRNhX6osheUOWETP2jMoV/2bEHuMra8Pp3Dmo/stBFcw==
 
 "@types/prop-types@*":
   version "15.7.3"
@@ -1759,10 +1759,10 @@ enhanced-resolve@^4.0.0, enhanced-resolve@^4.1.1, enhanced-resolve@^4.3.0:
     memory-fs "^0.5.0"
     tapable "^1.0.0"
 
-eosjs@^21.1.0-25-707787d:
-  version "21.1.0-25-707787d"
-  resolved "https://registry.yarnpkg.com/eosjs/-/eosjs-21.1.0-25-707787d.tgz#cdb699d5de6aa0b2376885cda6f7e9e46f9cf6fa"
-  integrity sha512-IyB6hel/mNxgb88FweKI6Bl9Zq6GX2mU1S8h3nCvsjmwIzeRICESGCh1Zleo9awCL3unHKOlm+vZHnQcYE2Y0w==
+eosjs@^21.1.0-27-2e51a04:
+  version "21.1.0-27-2e51a04"
+  resolved "https://registry.yarnpkg.com/eosjs/-/eosjs-21.1.0-27-2e51a04.tgz#82e19eb83e4ba91031fcc32b3baf4784858028ee"
+  integrity sha512-B+8xFI2fDK6augjwnAuYNJx1qX59EfoprOB2RNEgaLTtRQKWg/esGbpJMK2AgH8arH0PwF0K9qArZ9zTIEB0dQ==
   dependencies:
     bn.js "5.1.2"
     elliptic "6.5.3"
