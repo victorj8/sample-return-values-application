@@ -11,7 +11,7 @@ ports:
   onOpen: ignore
 
 tasks:
-  - before: yarn
+- before: yarn
   command: yarn run serveInGitPod
 - before: chmod 755 $PWD/docker/deploy_contracts.sh
   command: $PWD/docker/deploy_contracts.sh "" IS_GITPOD
