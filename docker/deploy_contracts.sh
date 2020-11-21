@@ -174,8 +174,8 @@ activate_feature "1a99a59d87e06e09ec5b028a9cbb7749b4a5ad8819004365d02dc4379a8b72
 activate_feature "bf61537fd21c61a60e542a5d66c3f6a78da0589336868307f94a82bccea84e88"
 
 sleep 1s
-cleos set abi returnvalue $CONTRACTS_DIR/action_results/action_results.abi -p returnvalue@active -p eosio@active
-cleos set code returnvalue $CONTRACTS_DIR/action_results/action_results.wasm -p returnvalue@active -p eosio@active
+cleos set abi returnvalue $CONTRACTS_DIR/action_return_value/action_return_value.abi -p returnvalue@active -p eosio@active
+cleos set code returnvalue $CONTRACTS_DIR/action_return_value/action_return_value.wasm -p returnvalue@active -p eosio@active
 
 echo "All done initializing the blockchain"
 

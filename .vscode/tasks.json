@@ -2,10 +2,37 @@
 	"version": "2.0.0",
 	"tasks": [
 		{
+			"label": "Build Contract with eosio-cpp",
 			"type": "shell",
-			"command": "cd ./contracts/action_return_value/build && cmake .. && make",
+			"command": "eosio-cpp -abigen ./contracts/action_return_value/src/action_return_value.cpp -o ./contracts/action_return_value/action_return_value.wasm -R ./contracts/action_return_value/ricardian/",
+			"group": "build"
+		},
+
+		{
+			"label": "Build Contract with CMake/Make",
+			"type": "shell",
+			"options": {
+				"cwd": "${workspaceRoot}/contracts/action_return_value/build"
+			},
 			"group": "build",
-			"label": "Build Contract"
+			"dependsOn": ["make"]
+		},
+		{
+			"label": "cmake",
+			"type": "shell",
+			"options": {
+				"cwd": "${workspaceRoot}/contracts/action_return_value/build"
+			},
+			"command": "cmake ..",
+		},
+		{
+			"label": "make",
+			"type": "shell",
+			"command": "make",
+			"options": {
+				"cwd": "${workspaceRoot}/contracts/action_return_value/build"
+			},
+			"dependsOn":["cmake"]
 		}
 	]
 }

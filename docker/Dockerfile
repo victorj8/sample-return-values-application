@@ -48,6 +48,26 @@ RUN yes | unminimize \
  && npm i -g yarn typescript
 ENV LANG=en_US.UTF-8
 
+### cmake
+WORKDIR /root
+RUN curl -LO https://cmake.org/files/v3.19/cmake-3.19.0.tar.gz \
+ && tar -xzf cmake-3.19.0.tar.gz \
+ && cd cmake-3.19.0 \
+ && ./bootstrap --prefix=/usr/local \
+ && make -j8 \
+ && make install \
+ && cd /root \
+ && rm -rf cmake-3.19.0.tar.gz cmake-3.19.0
+
+### boost
+RUN curl -LO https://dl.bintray.com/boostorg/release/1.72.0/source/boost_1_72_0.tar.bz2 \
+ && tar -xjf boost_1_72_0.tar.bz2 \
+ && cd boost_1_72_0 \
+ && ./bootstrap.sh --prefix=/usr/local \
+ && ./b2 --with-iostreams --with-date_time --with-filesystem --with-system --with-program_options --with-chrono --with-test -j8 install \
+ && cd /root \
+ && rm -rf boost_1_72_0.tar.bz2 boost_1_72_0
+
 ### Remove after release
 RUN mkdir -p /opt/eosio/binaries
 COPY ./binaries /opt/eosio/binaries
