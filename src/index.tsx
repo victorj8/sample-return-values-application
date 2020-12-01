@@ -22,7 +22,7 @@ const App: React.FC = () => {
 
   return (
     <div className='container'>
-      <div className='header'>Sample Return Values Application</div>
+      <div className='header'>Return Values Example App</div>
       <SumAction api={api}/>
     </div>
   )
@@ -30,5 +30,5 @@ const App: React.FC = () => {
 
 ReactDOM.render(
   <App />,
-  document.getElementById('sample')
+  document.getElementById('example')
 )

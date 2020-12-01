@@ -4,10 +4,9 @@
 		{
 			"label": "Build Contract with eosio-cpp",
 			"type": "shell",
-			"command": "eosio-cpp -abigen ./contracts/action_return_value/src/action_return_value.cpp -o ./contracts/action_return_value/action_return_value.wasm -R ./contracts/action_return_value/ricardian/",
+			"command": "eosio-cpp -abigen ./contracts/action_return_value/src/action_return_value.cpp -o ./contracts/action_return_value/build/action_return_value.wasm -R ./contracts/action_return_value/ricardian/",
 			"group": "build"
 		},
-
 		{
 			"label": "Build Contract with CMake/Make",
 			"type": "shell",

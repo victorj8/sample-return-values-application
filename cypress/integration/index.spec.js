@@ -1,4 +1,4 @@
-describe('Sample-Return-Values', () => {
+describe('Return-Values-Example', () => {
 
   it('Sum Action', () => {
     cy.visit('http://localhost:8080')

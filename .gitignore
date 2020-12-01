@@ -7,7 +7,8 @@ cypress/*
 !cypress/integration/index.spec.js
 *.deb
 dist
-build
+build/*
+!build/.keep
 node_modules
 docker/contracts
 .DS_Store
