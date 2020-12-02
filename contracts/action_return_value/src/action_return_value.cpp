@@ -8,7 +8,7 @@ class [[eosio::contract]] action_return_value : public contract {
 
       [[eosio::action]]
       int sum(int valueA, int valueB) {
-         return valueA + valueB;
+         return valueA * valueB;
       }
 
   private:
